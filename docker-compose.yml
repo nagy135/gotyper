@@ -20,19 +20,17 @@ services:
     ports:
       - "127.0.0.1:8080:8080"
 
-  # # FRONTEND
-  # app:
-  #   build:
-  #     context: ./app/
-  #     dockerfile: ./dockerfile.develop
-  #   env_file:
-  #     - ./env/.env.global
-  #   volumes:
-  #     - ./app:/app
-  #   ports:
-  #     - "3300:3000"
-  #   stdin_open: true
-  #
+  # FRONTEND
+  app:
+    build:
+      context: ./app/
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./app:/app
+    ports:
+      - "3400:3000"
+    stdin_open: true
+  
   # # AUTH
   # supertokens:
   #   image: "registry.supertokens.io/supertokens/supertokens-postgresql"

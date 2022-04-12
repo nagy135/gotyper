@@ -10,6 +10,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	cors "github.com/rs/cors/wrapper/gin"
 )
 
 func main() {
@@ -23,6 +24,8 @@ func main() {
 	migrateModels(db)
 
 	r := gin.Default()
+
+	r.Use(cors.Default())
 
 	r.GET("/echo/:echo", func(c *gin.Context) {
 		echo := c.Param("echo")
@@ -49,13 +52,12 @@ func main() {
 	r.GET("/texts", handlers.GetTexts(db))
 	r.POST("/texts", handlers.PostTexts(db))
 
-    r.GET("/games/:id/players", handlers.GetGamePlayers(db))
-    r.POST("/games/:id/join", handlers.JoinGame(db))
+	r.GET("/games/:id/players", handlers.GetGamePlayers(db))
+	r.POST("/games/:id/join", handlers.JoinGame(db))
 	r.POST("/games", handlers.PostGames(db))
 	r.GET("/games", handlers.GetGames(db))
 
-    r.POST("/players/:id/update-progress/:progress", handlers.UpdatePlayerProgress(db))
-
+	r.POST("/players/:id/update-progress/:progress", handlers.UpdatePlayerProgress(db))
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }
