@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  # DATABASE
+  # postgres:
+  #   image: postgres:13.1
+  #   volumes:
+  #     - database:/var/lib/postgresql/data
+  #   ports:
+  #     - "127.0.0.1:4210:5432"
+  #   env_file: ./env/.env.postgres
+
+  # BACKEND
+  api:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./api
+    # env_file:
+    #   - ./env/.env.global
+    #   - ./env/.env.api
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  # # FRONTEND
+  # app:
+  #   build:
+  #     context: ./app/
+  #     dockerfile: ./dockerfile.develop
+  #   env_file:
+  #     - ./env/.env.global
+  #   volumes:
+  #     - ./app:/app
+  #   ports:
+  #     - "3300:3000"
+  #   stdin_open: true
+  #
+  # # AUTH
+  # supertokens:
+  #   image: "registry.supertokens.io/supertokens/supertokens-postgresql"
+  #   ports:
+  #     - "127.0.0.1:3567:3567"
+
+# volumes:
+#   database:
+#     name: database
