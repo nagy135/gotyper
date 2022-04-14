@@ -14,7 +14,7 @@ func PostTexts(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		text := models.Text{
 			Name: "Text-" + utils.RandSeq(10),
-			Text: utils.RandSeq(100),
+			Text: utils.RandomText(100),
 		}
 
 		if err := db.Create(&text).Error; err != nil {
