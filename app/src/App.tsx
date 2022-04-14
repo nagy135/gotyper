@@ -1,22 +1,18 @@
-import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
+import { BrowserRouter } from "react-router-dom";
 
-const API = "http://localhost:8080";
+import Games from "./components/games";
+import Game from "./components/game";
 
 function App() {
-  const [games, setGames] = useState<any>(null);
-
-  useEffect(() => {
-    fetch(`${API}/games`)
-      .then((res) => setGames(res.json()))
-      .catch((e) => console.log(e));
-  }, []);
-
   return (
-    <div>
-      lol
-      {games}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Games />} />
+        <Route path="/games/:gameId" element={<Game />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
