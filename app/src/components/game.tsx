@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -14,17 +14,21 @@ import {
 import { TGame } from "../types";
 import Api from "../api";
 import Text from "./text";
+import JoinGame from "./join-game";
 
 export default function Games() {
   const navigate = useNavigate();
   const [game, setGame] = useState<TGame | null>(null);
   let { gameId } = useParams();
 
-  useEffect(() => {
+  const apiUpdate = useCallback(() => {
     if (gameId) Api.getGame(Number(gameId)).then((game) => setGame(game));
+  }, []);
+
+  useEffect(() => {
+    apiUpdate();
   }, [gameId]);
 
-  console.log("================\n", "game: ", game, "\n================");
   const redirectToGames = () => {
     navigate(`/`);
   };
@@ -38,6 +42,7 @@ export default function Games() {
         <>
           <h1>{game.Name}</h1>
           <h2>{game.Done ? "Ended" : "In progress"}</h2>
+          <JoinGame refreshGame={apiUpdate} gameId={Number(gameId)} />
           {game.Players && game.Players.length ? (
             <>
               <h2>Players ({game.Players.length})</h2>
