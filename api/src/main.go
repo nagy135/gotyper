@@ -54,7 +54,7 @@ func main() {
 
 	r.GET("/games/:id/players", handlers.GetGamePlayers(db))
 	r.POST("/games/:id/join", handlers.JoinGame(db))
-	r.POST("/games", handlers.PostGames(db))
+    r.POST("/games/create/:textId", handlers.PostGames(db))
 	r.GET("/games", handlers.GetGames(db))
 
 	r.POST("/players/:id/update-progress/:progress", handlers.UpdatePlayerProgress(db))

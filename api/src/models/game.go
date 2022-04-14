@@ -13,6 +13,9 @@ type Game struct {
 
     Players []Player
 
+    TextID int
+    Text Text
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
     DeletedAt *gorm.DeletedAt `gorm:"index"`

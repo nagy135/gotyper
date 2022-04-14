@@ -14,7 +14,7 @@ func GetGamePlayers(db *gorm.DB) func(c *gin.Context) {
 		id := c.Param("id")
 		var game models.Game
 
-		if err := db.Preload("Players").Find(&game, id).Error; err != nil {
+		if err := db.Preload("Players").Preload("Text").Find(&game, id).Error; err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
 		}
