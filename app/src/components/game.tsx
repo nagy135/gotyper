@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { TGame } from "../types";
 import Api from "../api";
+import Text from "./text";
 
 export default function Games() {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export default function Games() {
     if (gameId) Api.getGame(Number(gameId)).then((game) => setGame(game));
   }, [gameId]);
 
+  console.log("================\n", "game: ", game, "\n================");
   const redirectToGames = () => {
     navigate(`/`);
   };
@@ -68,6 +70,7 @@ export default function Games() {
               </TableContainer>
             </>
           ) : null}
+          <Text text={game.Text} />
         </>
       ) : null}
     </Container>
