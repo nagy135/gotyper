@@ -20,12 +20,6 @@ export default function Games() {
   const navigate = useNavigate();
   const [game, setGame] = useState<TGame | null>(null);
   const [playerId, setPlayerId] = useState<number | null>(null);
-  console.log(
-    "================\n",
-    "playerId: ",
-    playerId,
-    "\n================"
-  );
   let { gameId } = useParams();
 
   const apiUpdate = useCallback((playerId?: number) => {
@@ -83,7 +77,7 @@ export default function Games() {
               </TableContainer>
             </>
           ) : null}
-          <Text text={game.Text} />
+          <Text text={game.Text} playerId={playerId} />
         </>
       ) : null}
     </Container>
