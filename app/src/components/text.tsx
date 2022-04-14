@@ -48,6 +48,9 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
           fullWidth
           multiline
           rows={10}
+          inputProps={{style: {fontSize: "1.4em",}}} // font size of input text
+          InputLabelProps={{style: {fontSize: "1.4em"}}} // font size of input label
+
           style={{ caretColor: "transparent" }}
           value={shown}
           onKeyPress={(e) => gameKeyPressed(e.key)}
