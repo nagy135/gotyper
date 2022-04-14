@@ -77,7 +77,7 @@ export default function Games() {
               </TableContainer>
             </>
           ) : null}
-          <Text text={game.Text} playerId={playerId} />
+          <Text refreshGame={apiUpdate} text={game.Text} playerId={playerId} />
         </>
       ) : null}
     </Container>

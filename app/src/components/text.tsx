@@ -6,9 +6,10 @@ import Api from "../api";
 interface IProps {
   text: TText;
   playerId: number | null;
+  refreshGame: (playerId?: number) => void;
 }
 
-const Text = ({ text, playerId }: IProps) => {
+const Text = ({ text, playerId, refreshGame }: IProps) => {
   const [written, setWritten] = useState("");
   const [shown, setShown] = useState(text.Text);
   const [progress, setProgress] = useState(0);
@@ -23,9 +24,10 @@ const Text = ({ text, playerId }: IProps) => {
         setWritten((prev) => prev + key);
         setShown((prev) => prev.substring(1));
         setProgress((prev) => {
-          const next = Math.round((written.length / shown.length) * 100);
+          const next = Math.round((written.length / text.Text.length) * 100);
           if (next != prev) {
             Api.updateProgress(playerId, next);
+            refreshGame();
             return next;
           }
           return prev;
@@ -38,6 +40,7 @@ const Text = ({ text, playerId }: IProps) => {
   return (
     <Container>
       <h2>{text.Name}</h2>
+      <h2>Progress: {progress}</h2>
       <Box>
         <TextField
           id="outlined-multiline-static"
