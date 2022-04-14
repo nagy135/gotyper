@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -8,6 +8,7 @@ import Box from "@mui/material/Box";
 import { useNavigate } from "react-router-dom";
 import Api from "../api";
 import { TGame } from "../types";
+import NewGame from "./new-game";
 
 export default function Games() {
   const navigate = useNavigate();
@@ -17,12 +18,18 @@ export default function Games() {
     navigate(`/games/${id}`);
   };
 
+  const apiUpdate = useCallback(
+    () => Api.getGames().then((games) => setGames(games)),
+    []
+  );
+
   useEffect(() => {
-    Api.getGames().then((games) => setGames(games));
+    apiUpdate();
   }, []);
 
   return (
     <Container>
+      <NewGame refreshGames={apiUpdate} />
       {games.length ? (
         <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
           <nav aria-label="main mailbox folders">
