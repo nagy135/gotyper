@@ -19,10 +19,18 @@ import JoinGame from "./join-game";
 export default function Games() {
   const navigate = useNavigate();
   const [game, setGame] = useState<TGame | null>(null);
+  const [playerId, setPlayerId] = useState<number | null>(null);
+  console.log(
+    "================\n",
+    "playerId: ",
+    playerId,
+    "\n================"
+  );
   let { gameId } = useParams();
 
-  const apiUpdate = useCallback(() => {
+  const apiUpdate = useCallback((playerId?: number) => {
     if (gameId) Api.getGame(Number(gameId)).then((game) => setGame(game));
+    if (playerId) setPlayerId(playerId);
   }, []);
 
   useEffect(() => {

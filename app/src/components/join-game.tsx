@@ -7,14 +7,14 @@ const Wrapper = styled.div`
 `;
 
 interface IProps {
-  refreshGame: () => void;
+  refreshGame: (playerId: number) => void;
   gameId: number;
 }
 
 const JoinGame = ({ refreshGame, gameId }: IProps) => {
   const joinGameAction = async () => {
-    await joinGame(gameId);
-    refreshGame();
+    const playerId = await joinGame(gameId);
+    refreshGame(playerId);
   };
   return (
     <Wrapper>
