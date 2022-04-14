@@ -6,9 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 import Box from "@mui/material/Box";
 import { useNavigate } from 'react-router-dom'
-
-
-const API = "http://localhost:8080";
+import { API } from "../constants";
 
 export default function Games() {
   const navigate = useNavigate();

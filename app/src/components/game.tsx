@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import Container from '@mui/material/Container';
-import { useParams } from "react-router-dom";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-
-const API = "http://localhost:8080";
+import { useNavigate, useParams } from "react-router-dom";
+import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { API } from "../constants";
 
 export default function Games() {
+  const navigate = useNavigate();
   const [game, setGame] = useState<Record<string, any> | null>(null);
   let { gameId } = useParams();
 
@@ -15,13 +15,20 @@ export default function Games() {
       .then((res) => setGame(res));
   }, []);
 
-  console.log(game);
+  const redirectToGames = () => {
+    navigate(`/`);
+  }
 
   return (
     <Container>
+      <Button 
+        color="error"
+        onClick={redirectToGames}
+        variant="contained">Back</Button>
       {game ?
         <>
           <h1>{game["Name"]}</h1>
+          <h2>{game["Done"] ? "Ended" : "In progress"}</h2>
           {game["Players"].length ? <>
             <h2>Players</h2>
             <TableContainer component={Paper}>
@@ -30,6 +37,7 @@ export default function Games() {
                   <TableRow>
                     <TableCell>#</TableCell>
                     <TableCell align="right">Name</TableCell>
+                    <TableCell align="right">Progress</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -42,6 +50,7 @@ export default function Games() {
                         {player["ID"]}
                       </TableCell>
                       <TableCell align="right">{player["Name"]}</TableCell>
+                      <TableCell align="right">{player["Progress"]}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
