@@ -7,12 +7,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"gotyper/src/utils"
 )
 
 func JoinGame(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		id := c.Param("id")
+		name := c.Param("name")
 		var game models.Game
 
 		if err := db.Find(&game, id).Error; err != nil {
@@ -21,7 +21,7 @@ func JoinGame(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		player := models.Player{
-			Name:     "Player-" + utils.RandSeq(10),
+			Name:     name,
 			Game:     game,
 			Progress: 0,
 		}
