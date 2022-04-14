@@ -2,18 +2,17 @@ import { useEffect, useState } from "react";
 import Container from '@mui/material/Container';
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import { API } from "../constants";
+import { TGame } from "../types";
+import Api from "../api";
 
 export default function Games() {
   const navigate = useNavigate();
-  const [game, setGame] = useState<Record<string, any> | null>(null);
+  const [game, setGame] = useState<TGame | null>(null);
   let { gameId } = useParams();
 
   useEffect(() => {
-    fetch(`${API}/games/${gameId}/players`)
-      .then((res) => res.json())
-      .then((res) => setGame(res));
-  }, []);
+    if (gameId) Api.getGame(Number(gameId)).then(game => setGame(game));
+  }, [gameId]);
 
   const redirectToGames = () => {
     navigate(`/`);
@@ -21,15 +20,15 @@ export default function Games() {
 
   return (
     <Container>
-      <Button 
+      <Button
         color="error"
         onClick={redirectToGames}
         variant="contained">Back</Button>
       {game ?
         <>
-          <h1>{game["Name"]}</h1>
-          <h2>{game["Done"] ? "Ended" : "In progress"}</h2>
-          {game["Players"].length ? <>
+          <h1>{game.Name}</h1>
+          <h2>{game.Done ? "Ended" : "In progress"}</h2>
+          {game.Players && game.Players.length ? <>
             <h2>Players</h2>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -41,16 +40,16 @@ export default function Games() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {game["Players"].map((player: any) => (
+                  {game.Players.map((player: any) => (
                     <TableRow
-                      key={player["ID"]}
+                      key={player.ID}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
-                        {player["ID"]}
+                        {player.ID}
                       </TableCell>
-                      <TableCell align="right">{player["Name"]}</TableCell>
-                      <TableCell align="right">{player["Progress"]}</TableCell>
+                      <TableCell align="right">{player.Name}</TableCell>
+                      <TableCell align="right">{player.Progress}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

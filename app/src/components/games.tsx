@@ -6,20 +6,19 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItem from "@mui/material/ListItem";
 import Box from "@mui/material/Box";
 import { useNavigate } from 'react-router-dom'
-import { API } from "../constants";
+import Api from "../api";
+import { TGame } from "../types";
 
 export default function Games() {
   const navigate = useNavigate();
-  const [games, setGames] = useState<Record<string, string>[]>([]);
+  const [games, setGames] = useState<TGame[]>([]);
 
   const redirectToGame = (id: number) => {
     navigate(`/games/${id}`);
   };
 
   useEffect(() => {
-    fetch(`${API}/games`)
-      .then((res) => res.json())
-      .then((res) => setGames(res));
+    Api.getGames().then(games => setGames(games));
   }, []);
 
   return (
@@ -27,10 +26,10 @@ export default function Games() {
       <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         <nav aria-label="main mailbox folders">
           <List>
-            {games.map((e: any) => {
-              return <ListItem disablePadding>
-                <ListItemButton onClick={() => redirectToGame(e["ID"])}>
-                  <ListItemText primary={e["Name"]} />
+            {games.map((game) => {
+              return <ListItem disablePadding key={game.ID}>
+                <ListItemButton onClick={() => redirectToGame(game.ID)}>
+                  <ListItemText primary={game.Name} />
                 </ListItemButton>
               </ListItem>
             })}
