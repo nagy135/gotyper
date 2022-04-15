@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"gotyper/src/models"
+	"gotyper/src/requests"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -13,11 +13,12 @@ import (
 func UpdatePlayerProgress(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		id := c.Param("id")
-        progress, err := strconv.Atoi(c.Param("progress"))
-        if err != nil {
-			c.AbortWithStatus(400)
-			log.Println("incorrect player id")
-        }
+
+		var body requests.UpdatePlayerRequest
+		if err := c.ShouldBindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
 		var player models.Player
 
@@ -25,7 +26,8 @@ func UpdatePlayerProgress(db *gorm.DB) func(c *gin.Context) {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
 		}
-        player.Progress = progress
+        player.Progress = body.Progress
+        player.Wpm = body.Wpm
 
         db.Save(player)
 

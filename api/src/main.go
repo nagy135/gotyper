@@ -53,11 +53,11 @@ func main() {
 	r.POST("/texts", handlers.PostTexts(db))
 
 	r.GET("/games/:id/players", handlers.GetGamePlayers(db))
-    r.POST("/games/:id/join/", handlers.JoinGame(db))
+    r.POST("/games/:id/join", handlers.JoinGame(db))
     r.POST("/games", handlers.PostGames(db))
 	r.GET("/games", handlers.GetGames(db))
 
-	r.POST("/players/:id/update-progress/:progress", handlers.UpdatePlayerProgress(db))
+	r.POST("/players/:id/update-progress", handlers.UpdatePlayerProgress(db))
 
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

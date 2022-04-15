@@ -11,6 +11,7 @@ type Player struct {
 
 	Name string
 	Progress int
+    Wpm int `gorm:"default:0"`
 
     GameID int
     Game Game
