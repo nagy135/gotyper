@@ -14,6 +14,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
   const [written, setWritten] = useState("");
   const [shown, setShown] = useState(text.Text);
   const [progress, setProgress] = useState(0);
+  const [wpm, setWpm] = useState(0);
   const [startStamp, setStartStamp] = useState<number | null>(null);
 
   const gameKeyPressed = useCallback(
@@ -33,6 +34,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
               written.length,
               currentTimestampSec() - (startStamp ?? 0)
             );
+            setWpm(wpm);
             Api.updateProgress(playerId, next, wpm);
             refreshGame();
             return next;
@@ -45,23 +47,23 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
   );
 
   return (
-    <Container>
-      <h2>{text.Name}</h2>
+    <Box>
+      <h1>{text.Name}</h1>
       <h2>Progress: {progress}</h2>
+      <h2>Wpm: {wpm}</h2>
       <Box>
         <TextField
           id="outlined-multiline-static"
-          label="Multiline"
+          label="Click and Type!"
           fullWidth
           multiline
           inputProps={{ style: { fontSize: "1.4em" } }} // font size of input text
-          InputLabelProps={{ style: { fontSize: "1.4em" } }} // font size of input label
           style={{ caretColor: "transparent" }}
           value={shown}
           onKeyPress={(e) => gameKeyPressed(e.key)}
         />
       </Box>
-    </Container>
+    </Box>
   );
 };
 
