@@ -30,25 +30,21 @@ export default function Games() {
   return (
     <Container>
       <NewGame refreshGames={apiUpdate} />
-      {games.length ? (
-        <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-          <nav aria-label="main mailbox folders">
-            <List>
-              {games.map((game) => {
-                return (
-                  <ListItem disablePadding key={game.ID}>
-                    <ListItemButton onClick={() => redirectToGame(game.ID)}>
-                      <ListItemText primary={game.Name} />
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </nav>
-        </Box>
-      ) : (
-        <h1>No games exist</h1>
-      )}
+      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        <nav aria-label="main mailbox folders">
+          <List>
+            {games.map((game) => {
+              return (
+                <ListItem disablePadding key={game.ID}>
+                  <ListItemButton onClick={() => redirectToGame(game.ID)}>
+                    <ListItemText primary={game.Name} />
+                  </ListItemButton>
+                </ListItem>
+              );
+            })}
+          </List>
+        </nav>
+      </Box>
     </Container>
   );
 }

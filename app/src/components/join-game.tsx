@@ -1,4 +1,5 @@
-import { Box, Button, Container, Stack, TextField } from "@mui/material";
+import { Button, Box, Stack, TextField } from "@mui/material";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import joinGame from "../api/join-game";
@@ -22,15 +23,21 @@ const JoinGame = ({ refreshGame, gameId }: IProps) => {
   const joinGameAction = async () => {
     if (!name.length) {
       setNameError(ERR_MANDATORY_FIELD);
-      nameRef.current?.focus()
-      return
+      nameRef.current?.focus();
+      return;
     }
-    const playerId = await joinGame(gameId, name);
-    refreshGame(playerId);
+    try {
+      const playerId = await joinGame(gameId, name);
+      refreshGame(playerId);
+    } catch (e) {
+      if (e instanceof Error) setNameError(e.message);
+      nameRef.current?.focus();
+      return;
+    }
   };
   return (
     <Wrapper>
-      <Container>
+      <Box>
         <Stack
           direction="row"
           justifyContent="flex-start"
@@ -39,11 +46,12 @@ const JoinGame = ({ refreshGame, gameId }: IProps) => {
         >
           <Button variant="contained" onClick={() => joinGameAction()}>
             Join Game
+          <AddOutlinedIcon style={{ paddingLeft: '1em' }} />
           </Button>
           <TextField
             label="Nickname"
             inputRef={nameRef}
-            error={nameError !== ' ' ? true : false}
+            error={nameError !== " " ? true : false}
             value={name}
             helperText={nameError}
             onChange={(e) => {
@@ -53,7 +61,7 @@ const JoinGame = ({ refreshGame, gameId }: IProps) => {
             variant="outlined"
           />
         </Stack>
-      </Container>
+      </Box>
     </Wrapper>
   );
 };

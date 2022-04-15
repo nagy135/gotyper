@@ -1,4 +1,5 @@
 import { API } from "../constants";
+import { ERR_MANDATORY_FIELD, ERR_SERVER_ERROR } from "../errors/constants";
 
 const createNewGame = async (name: string) => {
   const response = await fetch(`${API}/games`, {
@@ -18,6 +19,12 @@ const createNewGame = async (name: string) => {
   });
 
   // TODO: type error
+  switch (response.status){
+    case 400:
+      throw new Error(ERR_MANDATORY_FIELD)
+    case 500:
+      throw new Error(ERR_SERVER_ERROR)
+  }
   if (!response.ok) throw new Error("Unknown");
 };
 

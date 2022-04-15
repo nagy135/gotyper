@@ -1,4 +1,5 @@
 import { API } from "../constants";
+import { ERR_MANDATORY_FIELD, ERR_SERVER_ERROR } from "../errors/constants";
 import { TPlayer } from "../types";
 
 const joinGame = async (id: number, name: string): Promise<number> => {
@@ -17,6 +18,14 @@ const joinGame = async (id: number, name: string): Promise<number> => {
       name
     }), // body data type must match "Content-Type" header
   });
+  // TODO: type error
+  switch (response.status){
+    case 400:
+      throw new Error(ERR_MANDATORY_FIELD)
+    case 500:
+      throw new Error(ERR_SERVER_ERROR)
+  }
+  if (!response.ok) throw new Error("Unknown");
 
   return ((await response.json()) as TPlayer).ID;
 };
