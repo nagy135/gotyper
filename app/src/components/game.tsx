@@ -23,7 +23,10 @@ export default function Games() {
   let { gameId } = useParams();
 
   const apiUpdate = useCallback((playerId?: number) => {
-    if (gameId) Api.getGame(Number(gameId)).then((game) => setGame(game));
+    if (gameId)
+      Api.getGame(Number(gameId))
+        .then((game) => setGame(game))
+        .catch(() => navigate(`/`));
     if (playerId) setPlayerId(playerId);
   }, []);
 

@@ -2,7 +2,7 @@ import { API } from "../constants";
 import { TPlayer } from "../types";
 
 const joinGame = async (id: number, name: string): Promise<number> => {
-  const response = await fetch(`${API}/games/${id}/join/${name}`, {
+  const response = await fetch(`${API}/games/${id}/join`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -13,7 +13,9 @@ const joinGame = async (id: number, name: string): Promise<number> => {
     },
     redirect: "follow", // manual, *follow, error
     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify({}), // body data type must match "Content-Type" header
+    body: JSON.stringify({
+      name
+    }), // body data type must match "Content-Type" header
   });
 
   return ((await response.json()) as TPlayer).ID;

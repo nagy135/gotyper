@@ -2,6 +2,7 @@ import { Box, Button, Container, Stack, TextField } from "@mui/material";
 import { useRef, useState } from "react";
 import styled from "styled-components";
 import joinGame from "../api/join-game";
+import { ERR_MANDATORY_FIELD } from "../errors/constants";
 
 const Wrapper = styled.div`
   margin: 1em 0;
@@ -14,12 +15,13 @@ interface IProps {
 
 const JoinGame = ({ refreshGame, gameId }: IProps) => {
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState(" ");
 
   const nameRef = useRef<HTMLInputElement | null>(null);
 
   const joinGameAction = async () => {
     if (!name.length) {
-      window.alert("fill in nickname");
+      setNameError(ERR_MANDATORY_FIELD);
       nameRef.current?.focus()
       return
     }
@@ -41,8 +43,13 @@ const JoinGame = ({ refreshGame, gameId }: IProps) => {
           <TextField
             label="Nickname"
             inputRef={nameRef}
+            error={nameError !== ' ' ? true : false}
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            helperText={nameError}
+            onChange={(e) => {
+              setName(e.target.value);
+              setNameError(" ");
+            }}
             variant="outlined"
           />
         </Stack>

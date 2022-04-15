@@ -1,7 +1,7 @@
 import { API } from "../constants";
 
-const createNewGame = async () => {
-  await fetch(`${API}/games`, {
+const createNewGame = async (name: string) => {
+  const response = await fetch(`${API}/games`, {
     method: "POST", // *GET, POST, PUT, DELETE, etc.
     mode: "cors", // no-cors, *cors, same-origin
     cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
@@ -12,8 +12,13 @@ const createNewGame = async () => {
     },
     redirect: "follow", // manual, *follow, error
     referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    body: JSON.stringify({}), // body data type must match "Content-Type" header
+    body: JSON.stringify({
+      name,
+    }), // body data type must match "Content-Type" header
   });
+
+  // TODO: type error
+  if (!response.ok) throw new Error("Unknown");
 };
 
 export default createNewGame;

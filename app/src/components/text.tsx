@@ -34,7 +34,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
         });
       }
     },
-    [written, playerId]
+    [written, playerId, text, refreshGame]
   );
 
   return (
