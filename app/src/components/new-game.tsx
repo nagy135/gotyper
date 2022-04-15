@@ -41,7 +41,7 @@ const NewGame = ({ refreshGames }: IProps) => {
           <AddOutlinedIcon style={{ paddingLeft: '1em' }} />
         </Button>
         <TextField
-          label="Nickname"
+          label="Name of Game"
           inputRef={nameRef}
           helperText={nameError}
           error={nameError !== " " ? true : false}

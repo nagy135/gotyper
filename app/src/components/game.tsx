@@ -64,6 +64,7 @@ export default function Games() {
                         <TableCell>#</TableCell>
                         <TableCell align="right">Name</TableCell>
                         <TableCell align="right">Progress</TableCell>
+                        <TableCell align="right">Wpm</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -79,6 +80,7 @@ export default function Games() {
                           </TableCell>
                           <TableCell align="right">{player.Name}</TableCell>
                           <TableCell align="right">{player.Progress}</TableCell>
+                          <TableCell align="right">{player.Wpm}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>

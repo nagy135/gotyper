@@ -2,6 +2,7 @@ import { Box, Container, TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import { TText } from "../types";
 import Api from "../api";
+import { calculateWpm, currentTimestampSec } from "../utils/wpm";
 
 interface IProps {
   text: TText;
@@ -13,6 +14,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
   const [written, setWritten] = useState("");
   const [shown, setShown] = useState(text.Text);
   const [progress, setProgress] = useState(0);
+  const [startStamp, setStartStamp] = useState<number | null>(null);
 
   const gameKeyPressed = useCallback(
     (key: string) => {
@@ -21,12 +23,17 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
         return;
       }
       if (text.Text.startsWith(written + key)) {
+        if (!startStamp) setStartStamp(currentTimestampSec);
         setWritten((prev) => prev + key);
         setShown((prev) => prev.substring(1));
         setProgress((prev) => {
           const next = Math.round((written.length / text.Text.length) * 100);
           if (next != prev) {
-            Api.updateProgress(playerId, next);
+            const wpm = calculateWpm(
+              written.length,
+              currentTimestampSec() - (startStamp ?? 0)
+            );
+            Api.updateProgress(playerId, next, wpm);
             refreshGame();
             return next;
           }
@@ -34,7 +41,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
         });
       }
     },
-    [written, playerId, text, refreshGame]
+    [written, playerId, text, refreshGame, startStamp]
   );
 
   return (
@@ -47,9 +54,8 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
           label="Multiline"
           fullWidth
           multiline
-          inputProps={{style: {fontSize: "1.4em",}}} // font size of input text
-          InputLabelProps={{style: {fontSize: "1.4em"}}} // font size of input label
-
+          inputProps={{ style: { fontSize: "1.4em" } }} // font size of input text
+          InputLabelProps={{ style: { fontSize: "1.4em" } }} // font size of input label
           style={{ caretColor: "transparent" }}
           value={shown}
           onKeyPress={(e) => gameKeyPressed(e.key)}
