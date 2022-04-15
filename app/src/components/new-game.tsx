@@ -32,7 +32,7 @@ const NewGame = ({ refreshGames }: IProps) => {
     <Wrapper>
       <Stack
         direction="row"
-        justifyContent="flex-start"
+        justifyContent="space-between"
         alignItems="stretch"
         spacing={2}
       >
