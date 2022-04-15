@@ -23,6 +23,8 @@ func PostGames(db *gorm.DB) func(c *gin.Context) {
 		if err := db.Take(&text).Error; err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
+
+            return
 		}
 
 		game := models.Game{
