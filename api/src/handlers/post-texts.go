@@ -1,8 +1,7 @@
 package handlers
 
 import (
-	"gotyper/src/models"
-	"gotyper/src/utils"
+	"gotyper/src/repository"
 	"log"
 	"net/http"
 
@@ -12,12 +11,7 @@ import (
 
 func PostTexts(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
-		text := models.Text{
-			Name: "Text-" + utils.RandSeq(10),
-			Text: utils.RandomText(10),
-		}
-
-		if err := db.Create(&text).Error; err != nil {
+		if text, err := repository.TextCreate(db); err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
 		} else {

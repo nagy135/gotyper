@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"gotyper/src/models"
+	"gotyper/src/repository"
 	"gotyper/src/requests"
 	"log"
 	"net/http"
@@ -18,25 +19,25 @@ func PostGames(db *gorm.DB) func(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		var text models.Text
 
-		if err := db.Take(&text).Error; err != nil {
+		if text, err := repository.TextCreate(db); err != nil {
 			c.AbortWithStatus(http.StatusInternalServerError)
 			log.Println(err)
 
-            return
-		}
-
-		game := models.Game{
-			Name: body.Name,
-			Text: text,
-		}
-
-		if err := db.Create(&game).Error; err != nil {
-			c.AbortWithStatus(http.StatusInternalServerError)
-			log.Println(err)
+			return
 		} else {
-			c.JSON(http.StatusOK, game)
+
+			game := models.Game{
+				Name: body.Name,
+				Text: *text,
+			}
+
+			if err := db.Create(&game).Error; err != nil {
+				c.AbortWithStatus(http.StatusInternalServerError)
+				log.Println(err)
+			} else {
+				c.JSON(http.StatusOK, game)
+			}
 		}
 	}
 
