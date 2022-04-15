@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"gotyper/src/models"
+	"gotyper/src/requests"
 	"log"
 	"net/http"
 
@@ -11,8 +12,15 @@ import (
 
 func JoinGame(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
+
+		var body requests.JoinGameRequest
+		if err := c.ShouldBindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
 		id := c.Param("id")
-		name := c.Param("name")
+
 		var game models.Game
 
 		if err := db.Find(&game, id).Error; err != nil {
@@ -21,7 +29,7 @@ func JoinGame(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		player := models.Player{
-			Name:     name,
+			Name:     body.Name,
 			Game:     game,
 			Progress: 0,
 		}

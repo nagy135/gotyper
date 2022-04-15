@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"gotyper/src/models"
-	"gotyper/src/utils"
+	"gotyper/src/requests"
 	"log"
 	"net/http"
 
@@ -12,6 +12,12 @@ import (
 
 func PostGames(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
+
+		var body requests.PostGameRequest
+		if err := c.ShouldBindJSON(&body); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		var text models.Text
 
 		if err := db.Take(&text).Error; err != nil {
@@ -20,7 +26,7 @@ func PostGames(db *gorm.DB) func(c *gin.Context) {
 		}
 
 		game := models.Game{
-			Name: "Game-" + utils.RandSeq(10),
+			Name: body.Name,
 			Text: text,
 		}
 
