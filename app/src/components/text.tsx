@@ -58,7 +58,7 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
   return (
     <Box>
       <h1 className="text-title">{text.Name}</h1>
-      {!playerId && (
+      {playerId && (
         <Box className="text-stats" sx={{ width: 130, maxWidth: 360, bgcolor: "background.paper" }}>
           <nav aria-label="main mailbox folders">
             <List>
