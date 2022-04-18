@@ -10,7 +10,7 @@ const Wrapper = styled.div`
 `;
 
 interface IProps {
-  refreshGame: (playerId: number) => void;
+  refreshGame: (playerId: number, scroll: boolean) => void;
   gameId: number;
 }
 
@@ -28,7 +28,7 @@ const JoinGame = ({ refreshGame, gameId }: IProps) => {
     }
     try {
       const playerId = await joinGame(gameId, name);
-      refreshGame(playerId);
+      refreshGame(playerId, true);
     } catch (e) {
       if (e instanceof Error) setNameError(e.message);
       nameRef.current?.focus();

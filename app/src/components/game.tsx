@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Container from "@mui/material/Container";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
+  Divider,
   Paper,
   Table,
   TableBody,
@@ -16,9 +17,21 @@ import Api from "../api";
 import Text from "./text";
 import JoinGame from "./join-game";
 import styled from "styled-components";
+import { ArrowBack } from "@mui/icons-material";
 
 const Wrapper = styled.div`
   margin: 1em 0;
+
+  .title,
+  .text-title {
+    font-size: 3.5em;
+  }
+   .text-stats {
+    margin-bottom: 1em;
+  }
+  .players {
+    margin-top: 1em;
+  }
 `;
 
 export default function Games() {
@@ -27,13 +40,22 @@ export default function Games() {
   const [playerId, setPlayerId] = useState<number | null>(null);
   let { gameId } = useParams();
 
-  const apiUpdate = useCallback((playerId?: number) => {
-    if (gameId)
-      Api.getGame(Number(gameId))
-        .then((game) => setGame(game))
-        .catch(() => navigate(`/`));
-    if (playerId) setPlayerId(playerId);
-  }, []);
+  const apiUpdate = useCallback(
+    (playerId?: number, scroll: boolean = false) => {
+      if (gameId)
+        Api.getGame(Number(gameId))
+          .then((game) => setGame(game))
+          .catch(() => navigate(`/`));
+      if (playerId) setPlayerId(playerId);
+      if (scroll)
+        window.scrollTo({
+          left: 0,
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+    },
+    []
+  );
 
   useEffect(() => {
     apiUpdate();
@@ -47,15 +69,22 @@ export default function Games() {
     <Wrapper>
       <Container>
         <Button color="error" onClick={redirectToGames} variant="contained">
-          Back
+          <ArrowBack />
         </Button>
         {game ? (
           <>
-            <h1>{game.Name}</h1>
-            <h2>{game.Done ? "Ended" : "In progress"}</h2>
+            <h1 className="title">{game.Name}</h1>
+            <Divider />
             <JoinGame refreshGame={apiUpdate} gameId={Number(gameId)} />
+            <Divider />
+            <Text
+              refreshGame={apiUpdate}
+              text={game.Text}
+              playerId={playerId}
+            />
             {game.Players && game.Players.length ? (
-              <>
+              <div className="players">
+                <Divider />
                 <h2>Players ({game.Players.length})</h2>
                 <TableContainer component={Paper}>
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -86,13 +115,8 @@ export default function Games() {
                     </TableBody>
                   </Table>
                 </TableContainer>
-              </>
+              </div>
             ) : null}
-            <Text
-              refreshGame={apiUpdate}
-              text={game.Text}
-              playerId={playerId}
-            />
           </>
         ) : null}
       </Container>

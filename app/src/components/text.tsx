@@ -1,8 +1,25 @@
-import { Box, Container, TextField } from "@mui/material";
+import {
+  Box,
+  Container,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { useCallback, useState } from "react";
 import { TText } from "../types";
 import Api from "../api";
 import { calculateWpm, currentTimestampSec } from "../utils/wpm";
+import { Percent, Speed } from "@mui/icons-material";
 
 interface IProps {
   text: TText;
@@ -48,9 +65,31 @@ const Text = ({ text, playerId, refreshGame }: IProps) => {
 
   return (
     <Box>
-      <h1>{text.Name}</h1>
-      <h2>Progress: {progress}</h2>
-      <h2>Wpm: {wpm}</h2>
+      <h1 className="text-title">{text.Name}</h1>
+      {!playerId && (
+        <Box className="text-stats" sx={{ width: 130, maxWidth: 360, bgcolor: "background.paper" }}>
+          <nav aria-label="main mailbox folders">
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Percent />
+                  </ListItemIcon>
+                  <ListItemText primary={progress} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemIcon>
+                    <Speed />
+                  </ListItemIcon>
+                  <ListItemText primary={wpm} />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </nav>
+        </Box>
+      )}
       <Box>
         <TextField
           id="outlined-multiline-static"
