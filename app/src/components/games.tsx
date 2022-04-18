@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "../api";
 import { TGame } from "../types";
@@ -6,12 +6,14 @@ import NewGame from "./new-game";
 import styled from "styled-components";
 import {
   Box,
+  Button,
   Container,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
 } from "@mui/material";
+import { Clear } from "@mui/icons-material";
 
 const Wrapper = styled(Box)`
   border: 1px solid #aaaaaa;
@@ -32,6 +34,11 @@ export default function Games() {
     () => Api.getGames().then((games) => setGames(games)),
     []
   );
+
+  const removeGame = useCallback((id: number, e: MouseEvent) => {
+    e.stopPropagation();
+    Api.removeGames(id).then(() => apiUpdate());
+  }, []);
 
   useEffect(() => {
     apiUpdate();
@@ -54,6 +61,13 @@ export default function Games() {
                         fontWeight: "bold",
                       }}
                     />
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={(e) => removeGame(game.ID, e)}
+                    >
+                      <Clear/>
+                    </Button>
                   </ListItemButton>
                 </ListItem>
               );

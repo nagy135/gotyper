@@ -4,6 +4,7 @@ import getTexts from "./get-texts";
 import createNewGame from "./create-new-game";
 import joinGame from "./join-game";
 import updateProgress from "./update-progress";
+import removeGames from "./remove-games";
 
 export default {
   getGame,
@@ -12,4 +13,5 @@ export default {
   createNewGame,
   joinGame,
   updateProgress,
+  removeGames
 };
