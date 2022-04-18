@@ -10,8 +10,23 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	cors "github.com/rs/cors/wrapper/gin"
 )
+
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
 
 func main() {
 
@@ -25,7 +40,7 @@ func main() {
 
 	r := gin.Default()
 
-	r.Use(cors.Default())
+	r.Use(CORSMiddleware())
 
 	r.GET("/echo/:echo", func(c *gin.Context) {
 		echo := c.Param("echo")
@@ -53,9 +68,10 @@ func main() {
 	r.POST("/texts", handlers.PostTexts(db))
 
 	r.GET("/games/:id/players", handlers.GetGamePlayers(db))
-    r.POST("/games/:id/join", handlers.JoinGame(db))
-    r.POST("/games", handlers.PostGames(db))
+	r.POST("/games/:id/join", handlers.JoinGame(db))
+	r.POST("/games", handlers.PostGames(db))
 	r.GET("/games", handlers.GetGames(db))
+	r.DELETE("/games/:id", handlers.DeleteGames(db))
 
 	r.POST("/players/:id/update-progress", handlers.UpdatePlayerProgress(db))
 
